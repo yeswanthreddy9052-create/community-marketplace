@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusBazar | Student Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .campus-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="showPage('landing')">
+                <span class="text-2xl font-extrabold text-blue-700 tracking-tight">Campus<span class="text-orange-500">Bazar</span></span>
+            </div>
+            
+            <div id="nav-auth" class="flex items-center space-x-4">
+                <button onclick="showPage('login')" class="text-slate-600 font-semibold hover:text-blue-600">Login</button>
+                <button onclick="showPage('signup')" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-blue-700 transition">Join Community</button>
+            </div>
+
+            <div id="nav-user" class="hidden flex items-center space-x-6">
+                <div class="relative group">
+                    <button class="text-slate-600"><i class="fas fa-bell text-xl"></i></button>
+                </div>
+                <button onclick="openSellModal()" class="bg-orange-500 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-orange-600">
+                    <i class="fas fa-plus"></i> Sell Item
+                </button>
+                <button onclick="logout()" class="text-slate-400 hover:text-red-500"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="landing-page" class="pt-16 pb-20 px-4">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">For Students, By Students</span>
+                <h1 class="text-5xl lg:text-7xl font-extrabold mt-6 leading-tight">Your Campus <br><span class="text-blue-600">Shopping Hub.</span></h1>
+                <p class="text-lg text-slate-600 mt-6 max-w-lg">Buying semesters' worth of books or selling your old lab coat? Do it all within your campus community securely.</p>
+                <div class="mt-10 flex gap-4">
+                    <button onclick="showPage('signup')" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold hover:scale-105 transition">Start Trading</button>
+                    <div class="flex -space-x-3 items-center">
+                        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=1">
+                        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=2">
+                        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=3">
+                        <span class="pl-5 text-sm font-semibold text-slate-500">500+ Students Active</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800" class="rounded-[2rem] shadow-2xl z-10 relative">
+            </div>
+        </div>
+    </section>
+
+    <section id="auth-page" class="hidden min-h-[80vh] flex items-center justify-center px-4">
+        <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-slate-100">
+            <h2 id="auth-title" class="text-3xl font-black mb-2">Welcome Back</h2>
+            <p class="text-slate-500 mb-8">Please enter your campus email to continue.</p>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <input type="email" placeholder="College Email (e.g. .edu or .in)" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none transition">
+                <input type="password" placeholder="Password" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none transition">
+                <button class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Enter Marketplace</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="dashboard" class="hidden max-w-7xl mx-auto px-4 py-12">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div>
+                <h2 class="text-3xl font-black">Latest Listings</h2>
+                <div class="flex gap-2 mt-4 overflow-x-auto pb-2">
+                    <button class="category-btn active px-5 py-2 rounded-full bg-blue-600 text-white font-bold">All</button>
+                    <button class="category-btn px-5 py-2 rounded-full bg-white border border-slate-200 hover:border-blue-400">Books</button>
+                    <button class="category-btn px-5 py-2 rounded-full bg-white border border-slate-200 hover:border-blue-400">Furniture</button>
+                    <button class="category-btn px-5 py-2 rounded-full bg-white border border-slate-200 hover:border-blue-400">Lab Gear</button>
+                    <button class="category-btn px-5 py-2 rounded-full bg-white border border-slate-200 hover:border-blue-400">Electronics</button>
+                </div>
+            </div>
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" placeholder="Search for apron, mattress..." class="pl-12 pr-6 py-3 bg-white rounded-full border border-slate-200 w-full md:w-80 outline-none focus:ring-2 focus:ring-blue-100">
+            </div>
+        </div>
+
+        <div id="items-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            </div>
+    </section>
+
+    <div id="sell-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center px-4">
+        <div class="bg-white w-full max-w-lg rounded-3xl p-8 shadow-2xl transform transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">List an Item</h3>
+                <button onclick="closeSellModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form onsubmit="addNewItem(event)" class="space-y-4">
+                <input id="item-name" type="text" placeholder="Product Name (e.g. HC Verma Physics)" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <div class="grid grid-cols-2 gap-4">
+                    <select id="item-cat" class="p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                        <option>Books</option>
+                        <option>Furniture</option>
+                        <option>Lab Gear</option>
+                        <option>Electronics</option>
+                    </select>
+                    <input id="item-price" type="number" placeholder="Price (₹)" required class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                </div>
+                <textarea id="item-desc" placeholder="Details (Condition, year of purchase, etc.)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl h-24"></textarea>
+                <input id="item-img" type="text" placeholder="Image URL (e.g. from Unsplash)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <button type="submit" class="w-full bg-orange-500 text-white py-4 rounded-xl font-black text-lg hover:bg-orange-600 transition shadow-lg">Post to Market</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initial Product Data
+        let products = [
+            { id: 1, name: "Engineering Graphics Set", price: 450, category: "Lab Gear", desc: "Used for 1 semester, like new.", img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400" },
+            { id: 2, name: "Python Programming Vol 2", price: 299, category: "Books", desc: "No markings inside. 2023 Edition.", img: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400" },
+            { id: 3, name: "Study Table & Chair", price: 1800, category: "Furniture", desc: "Foldable wooden table, perfect for hostel.", img: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400" },
+            { id: 4, name: "Scientific Calculator", price: 900, category: "Electronics", desc: "Casio fx-991EX. Original warranty left.", img: "https://images.unsplash.com/photo-1574607383476-f517f220d356?w=400" }
+        ];
+
+        function showPage(page) {
+            ['landing-page', 'auth-page', 'dashboard'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            if (page === 'landing') document.getElementById('landing-page').classList.remove('hidden');
+            if (page === 'login' || page === 'signup') document.getElementById('auth-page').classList.remove('hidden');
+            if (page === 'dashboard') {
+                document.getElementById('dashboard').classList.remove('hidden');
+                renderItems();
+            }
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            document.getElementById('nav-auth').classList.add('hidden');
+            document.getElementById('nav-user').classList.remove('hidden');
+            showPage('dashboard');
+        }
+
+        function logout() {
+            document.getElementById('nav-auth').classList.remove('hidden');
+            document.getElementById('nav-user').classList.add('hidden');
+            showPage('landing');
+        }
+
+        function openSellModal() { document.getElementById('sell-modal').classList.remove('hidden'); }
+        function closeSellModal() { document.getElementById('sell-modal').classList.add('hidden'); }
+
+        function addNewItem(e) {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                name: document.getElementById('item-name').value,
+                price: document.getElementById('item-price').value,
+                category: document.getElementById('item-cat').value,
+                desc: document.getElementById('item-desc').value,
+                img: document.getElementById('item-img').value || 'https://images.unsplash.com/photo-1544640808-32ca72ac7f07?w=400'
+            };
+            products.unshift(newItem); // Add to start of list
+            renderItems();
+            closeSellModal();
+            e.target.reset();
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('items-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-[1.5rem] border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                    <div class="h-52 overflow-hidden relative">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter text-blue-600">
+                            ${p.category}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-lg text-slate-800 line-clamp-1">${p.name}</h3>
+                        <p class="text-slate-500 text-sm mt-1 h-10 overflow-hidden">${p.desc}</p>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-2xl font-black text-slate-900">₹${p.price}</span>
+                            <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition">Chat</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
